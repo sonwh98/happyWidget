@@ -67,7 +67,7 @@ public class HappyWidgetProvider extends AppWidgetProvider {
 
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
-                    String loc = "{\"loc\": [" + longitude + "," + latitude + "], \"level\": 1}";
+                    String loc = "{\"loc\": [" + longitude + "," + latitude + "], \"level\": 5}";
                     writer.write(loc);
                     Log.d("Foo", loc);
 
