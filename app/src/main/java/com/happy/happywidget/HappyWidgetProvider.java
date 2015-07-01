@@ -6,6 +6,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -22,9 +24,11 @@ import java.net.URL;
  */
 public class HappyWidgetProvider extends AppWidgetProvider {
     private static final String MyOnClick1 = "myOnClickTag";
+    LocationManager locationManager;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+
         final int N = appWidgetIds.length;
 
         for (int i = 0; i < N; i++) {
@@ -46,6 +50,7 @@ public class HappyWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         Toast.makeText(context, "Button1", Toast.LENGTH_SHORT).show();
         Thread t = new Thread() {
             @Override
@@ -57,8 +62,12 @@ public class HappyWidgetProvider extends AppWidgetProvider {
                     conn.setRequestMethod("POST");
                     conn.setDoInput(true);
                     OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+                    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-                    writer.write("username=foo%password=bar");
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    Log.d("Foo","longitude="+longitude+" latitude="+latitude);
+                    writer.write("username=foo%password=bar&longitude=" + longitude + "&latitude=" + latitude);
                     writer.flush();
 
                     String line;
