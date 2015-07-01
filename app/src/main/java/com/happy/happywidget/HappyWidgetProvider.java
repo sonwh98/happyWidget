@@ -60,14 +60,17 @@ public class HappyWidgetProvider extends AppWidgetProvider {
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Content-Type", "application/json");
                     conn.setDoInput(true);
                     OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
                     Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
-                    Log.d("Foo","longitude="+longitude+" latitude="+latitude);
-                    writer.write("username=foo%password=bar&longitude=" + longitude + "&latitude=" + latitude);
+                    String loc = "{\"loc\": [" + longitude + "," + latitude + "], \"level\": 1}";
+                    writer.write(loc);
+                    Log.d("Foo", loc);
+
                     writer.flush();
 
                     String line;
